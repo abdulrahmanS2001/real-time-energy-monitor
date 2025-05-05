@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arduino WebSocket Test</title>
+</head>
+<body>
+    <h2>Arduino Data:</h2>
+    <pre id="output"></pre>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8080');
+        const output = document.getElementById('output');
+
+        ws.onopen = () => {
+            output.textContent += 'Connected to WebSocket server\n';
+        };
+
+        ws.onmessage = (event) => {
+            output.textContent += `Received: ${event.data}\n`;
+        };
+
+        ws.onerror = (error) => {
+            output.textContent += `Error: ${error.message}\n`;
+        };
+
+        ws.onclose = () => {
+            output.textContent += 'Disconnected from WebSocket server\n';
+        };
+    </script>
+</body>
+</html> 

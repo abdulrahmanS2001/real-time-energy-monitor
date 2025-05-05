@@ -1,0 +1,13 @@
+{
+  "name": "arduino-power-monitor",
+  "version": "1.0.0",
+  "description": "Real-time Arduino power monitoring dashboard",
+  "main": "start.js",
+  "scripts": {
+    "start": "node start.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

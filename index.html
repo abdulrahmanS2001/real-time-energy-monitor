@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Power Monitor</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="clock">
+            <div class="time" id="time">00:00:00</div>
+        </div>
+        <div class="server-status">
+            <div class="status-indicator" id="status-indicator"></div>
+            <span class="status-text" id="status-text">Arduino Status: Checking...</span>
+        </div>
+        <div class="readings-container">
+            <div class="power-reading">
+                <h3>Current Power</h3>
+                <div class="power-value" id="power-value">0 W</div>
+            </div>
+            <div class="power-reading total">
+                <h3>Total Power Generated</h3>
+                <div class="power-value" id="total-power-value">0 kWh</div>
+            </div>
+        </div>
+        
+        <div class="history-controls">
+            <h3>Historical Data</h3>
+            <div class="button-group">
+                <button onclick="loadHistoricalData('day')" class="active">24 Hours</button>
+                <button onclick="loadHistoricalData('week')">Week</button>
+                <button onclick="loadHistoricalData('month')">Month</button>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="powerChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="historicalChart"></canvas>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

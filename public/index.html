@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Power Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .power-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2196F3;
+            margin: 20px 0;
+        }
+        .time {
+            font-size: 32px;
+            color: #333;
+            margin: 20px 0;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+        .status-indicator.active {
+            background-color: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Power Monitor</h1>
+        <div class="power-value" id="power-value">0</div>
+        <div class="time" id="time">00:00:00</div>
+        <div class="status">
+            <div class="status-indicator" id="status-indicator"></div>
+            <span id="status-text">Connecting...</span>
+        </div>
+    </div>
+
+    <script>
+        // Connect to WebSocket server
+        const ws = new WebSocket('ws://localhost:8080');
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        const powerValue = document.getElementById('power-value');
+        const timeDisplay = document.getElementById('time');
+
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Update time every second
+        setInterval(updateTime, 1000);
+        updateTime(); // Initial update
+
+        // WebSocket event handlers
+        ws.onopen = () => {
+            statusIndicator.classList.add('active');
+            statusText.textContent = 'Connected';
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'sensor_data') {
+                powerValue.textContent = data.value.toFixed(2);
+            }
+        };
+
+        ws.onclose = () => {
+            statusIndicator.classList.remove('active');
+            statusText.textContent = 'Disconnected';
+        };
+
+        ws.onerror = () => {
+            statusIndicator.classList.remove('active');
+            statusText.textContent = 'Error';
+        };
+    </script>
+</body>
+</html> 
